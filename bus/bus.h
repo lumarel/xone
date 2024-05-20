@@ -19,6 +19,21 @@
 #define module_gip_driver(drv) \
 	module_driver(drv, gip_register_driver, gip_unregister_driver)
 
+/* Defined for RHEL, upstream and deratives (CentOS Stream, Rocky Linux, AlmaLinux, ...)
+ * https://gitlab.com/redhat/centos-stream/src/kernel/centos-stream-9/-/blob/b9b300a4386b2670aa905cc924ac377c99aa3fff/Makefile#L1322
+ */
+#if defined(RHEL_RELEASE_CODE) && defined(RHEL_RELEASE_VERSION)
+#	if RHEL_RELEASE_CODE < RHEL_RELEASE_VERSION(8, 7)
+#		define RHEL_BACKPORTS_8_7
+#	endif
+#   if RHEL_RELEASE_CODE < RHEL_RELEASE_VERSION(9, 1)
+#       define RHEL_BACKPORTS_9_1
+#   endif
+#   if RHEL_RELEASE_CODE < RHEL_RELEASE_VERSION(9, 4)
+#       define RHEL_BACKPORTS_9_4
+#   endif
+#endif
+
 struct gip_adapter_buffer {
 	enum gip_adapter_buffer_type {
 		GIP_BUF_DATA,

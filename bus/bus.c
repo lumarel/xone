@@ -25,7 +25,7 @@ static struct device_type gip_adapter_type = {
 	.release = gip_adapter_release,
 };
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 3, 0)
+#if defined(RHEL_BACKPORT_8_10) || defined(RHEL_BACKPORT_9_4) || LINUX_VERSION_CODE < KERNEL_VERSION(6, 3, 0)
 static int gip_client_uevent(struct device *dev, struct kobj_uevent_env *env)
 #else
 static int gip_client_uevent(const struct device *dev,
@@ -112,7 +112,7 @@ static void gip_bus_remove(struct device *dev)
 	up(&client->drv_lock);
 }
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 15, 0)
+#if defined(RHEL_BACKPORT_8_7) || defined(RHEL_BACKPORT_9_1) || LINUX_VERSION_CODE < KERNEL_VERSION(5, 15, 0)
 static int gip_bus_remove_compat(struct device *dev)
 {
 	gip_bus_remove(dev);
@@ -125,7 +125,7 @@ static struct bus_type gip_bus_type = {
 	.name = "xone-gip",
 	.match = gip_bus_match,
 	.probe = gip_bus_probe,
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 15, 0)
+#if defined(RHEL_BACKPORT_8_7) || defined(RHEL_BACKPORT_9_1) || LINUX_VERSION_CODE < KERNEL_VERSION(5, 15, 0)
 	.remove = gip_bus_remove_compat,
 #else
 	.remove = gip_bus_remove,
